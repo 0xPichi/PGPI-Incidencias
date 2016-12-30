@@ -1680,8 +1680,9 @@ function hook_form_alter(&$form, &$form_state, $form_id) {
     );
   }
 
+	print("HOLA");
   if ($form_id == "incidencias") {
-	if (isset($user->roles[4])) {
+	if (isset($user->roles[2])) {
 		hide($form['field_t_cnico']);
   }
 	}
