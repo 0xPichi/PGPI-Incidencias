@@ -1669,8 +1669,6 @@ function hook_page_alter(&$page) {
  * @see forms_api_reference.html
  */
 function hook_form_alter(&$form, &$form_state, $form_id) {
-
-  global $user;
   if (isset($form['type']) && $form['type']['#value'] . '_node_settings' == $form_id) {
     $form['workflow']['upload_' . $form['type']['#value']] = array(
       '#type' => 'radios',
@@ -1679,12 +1677,6 @@ function hook_form_alter(&$form, &$form_state, $form_id) {
       '#options' => array(t('Disabled'), t('Enabled')),
     );
   }
-
-  if ($form_id == "incidencias") {
-	if (isset($user->roles[4])) {
-		hide($form['field_t_cnico']);
-  }
-	}
 }
 
 /**
@@ -4902,6 +4894,7 @@ function callback_entity_info_language($entity, $entity_type) {
   return $entity->language;
 }
 
+<<<<<<< HEAD
 /**Funcion agregada por mi 
 function callback_entity_form_alter(&$form, &$form_state. $form_id) {
 	global $user;
@@ -4912,6 +4905,8 @@ function callback_entity_form_alter(&$form, &$form_state. $form_id) {
 	}
 }*/
 
+=======
+>>>>>>> 10e6e85d8362bda7333f03adf7a582945b8b9bcf
 /**
  * @} End of "addtogroup callbacks".
  */
