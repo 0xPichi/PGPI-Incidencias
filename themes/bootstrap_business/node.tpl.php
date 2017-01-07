@@ -25,12 +25,14 @@
       hide($content['field_tags']);
       print render($content);
     ?>
+
   </div>
     
     <?php if (($tags = render($content['field_tags'])) || ($links = render($content['links']))): ?>
     <footer>
     <?php print render($content['field_tags']); ?>
-    <?php print render($content['links']); ?>
+    <?php print render($content['links']); ?> 
+    <a href="<?php print $node_url; ?>">Solicitar Cierre</a>
     </footer>
     <?php endif; ?> 
 
