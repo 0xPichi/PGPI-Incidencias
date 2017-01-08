@@ -655,7 +655,6 @@ function comment_node_view($node, $view_mode) {
             'title' => t('Add new comment'),
             'href' => "comment/reply/$node->nid",
             'attributes' => array('title' => t('Add a new comment to this page.')),
-            'fragment' => 'comment-form',
           );
         }
         else {
@@ -681,7 +680,6 @@ function comment_node_view($node, $view_mode) {
               'title' => t('Add new comment'),
               'attributes' => array('title' => t('Share your thoughts and opinions related to this posting.')),
               'href' => "node/$node->nid",
-              'fragment' => 'comment-form',
             );
             if ($comment_form_location == COMMENT_FORM_SEPARATE_PAGE) {
               $links['comment-add']['href'] = "comment/reply/$node->nid";

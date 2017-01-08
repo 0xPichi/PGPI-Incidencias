@@ -162,7 +162,7 @@ blockquote > p:first-child {
   display: inline;
 }
 a.feed-icon {
-  display: inline-block;
+  display: hide;
   padding: 15px 0 0 0;
 }
 

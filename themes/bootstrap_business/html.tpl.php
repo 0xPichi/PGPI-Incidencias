@@ -6,17 +6,18 @@
   <?php print $styles; ?>
 
   <?php if (theme_get_setting('responsive_respond','bootstrap_business')): global $base_path; global $base_root; ?>
-  <!-- Media Queries support for IE6-8 -->  
+  <!-- Media Queries support for IE6-8 -->
   <!--[if lt IE 9]>
     <script src="<?php print $base_root . $base_path . path_to_theme() ?>/js/respond.min.js"></script>
   <![endif]-->
   <?php endif; ?>
-  
+
   <!-- HTML5 element support for IE6-8 -->
   <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
   <?php print $scripts; ?>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
 </head>
 <body class="<?php print $classes; ?>" <?php print $attributes;?>>
   <div id="skip-link">

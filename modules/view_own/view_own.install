@@ -1,0 +1,22 @@
+<?php
+// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
+
+/**
+ * @file
+ * Installation of view_own module
+ * 
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function view_own_install() {
+  // this module do not needs special schema
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function view_own_uninstall() {
+}
+

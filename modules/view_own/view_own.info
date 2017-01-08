@@ -1,0 +1,11 @@
+name = View own
+description = Provide 'view own' and 'view any' access right for all content types
+core = 6.x
+
+
+; Information added by drupal.org packaging script on 2011-08-01
+version = "6.x-1.2-rc1"
+core = "6.x"
+project = "view_own"
+datestamp = "1312194721"
+

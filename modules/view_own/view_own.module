@@ -1,0 +1,140 @@
+<?php
+// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
+
+/**
+ * @file
+ * View_own module. Module add view own and view any permissions for 
+ * all content types, for all roles. So, administrator can build a 
+ * more flexible system of rights. 
+ */
+
+/**
+ * Implementation of hook_help()
+ */
+function view_own_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#view_own':
+      $output = 'Some help info about module';
+      $output = '<p>'. t('The view own module allows administrators to restrict access to nodes with two additional permssions for each content type: "view own <content-type> content"  and "view any <content-type> content".') .'</p>';
+      return $output;
+  }
+}
+
+
+/**
+ * Implementation of hook_perm().
+ *
+ * Add view own and view any permissions for all content types
+ */
+
+function view_own_perm() {
+  foreach (node_get_types() as $type) {
+    if ($type->module == 'node') {
+      $perms[] = 'view own '. $type->type .' content';
+      $perms[] = 'view any '. $type->type .' content';
+    }
+  }
+  return $perms;
+}
+
+/**
+ * Implementation of hook_node_grants
+ *
+ */
+
+function view_own_node_grants($account, $op) {
+  return array(
+    'view_own_owner' => array($account->uid),
+    'view_own_role' => array_keys($account->roles)
+  );
+}
+
+/**
+ * Implementation of hook_node_access_records().
+ *
+ * All node access modules must implement this hook.
+ */
+function view_own_node_access_records($node) {
+  if (view_own_disabling()) {
+    return;
+  }
+
+  $default_permissions = _get_default_permissions();
+
+  $define_node_access = FALSE;
+  foreach (array_keys(user_roles()) as $rid) {
+    $view_own_content = 'view own '. $node->type .' content';
+    if ($restrict_on_owner = in_array($view_own_content, $default_permissions[$rid]) && !$define_node_access) {
+      $edit_perm = FALSE;
+      $delete_perm = FALSE;
+      $view_perm = TRUE;
+      $tmp_gid = $node->uid;
+      $realm = 'view_own_owner';
+
+      $define_node_access = TRUE;
+    }
+    else {
+      $permission = 'edit any '. $node->type .' content';
+      $edit_perm = in_array($permission, $default_permissions[$rid])  ? 1 : 0;
+      $permission = 'delete any '. $node->type .' content';
+      $edit_perm = in_array($permission, $default_permissions[$rid])  ? 1 : 0;
+      $view_any_content = 'view any '. $node->type .' content';
+      $view_perm = (($edit_perm || $delete_perm) ? 1 : in_array($view_any_content, $default_permissions[$rid]));
+      $tmp_gid = $rid;
+      $realm = 'view_own_role';
+    }
+
+    $grants[] = array(
+      'realm' => $realm,
+      'gid' => $tmp_gid,
+      'grant_view' => $view_perm,
+      'grant_update' => $edit_perm,
+      'grant_delete' => $delete_perm,
+      'priority' => 0,
+    );
+  }
+  return $grants;
+}
+
+/**
+ * Get default permissions from 
+ */
+function _get_default_permissions() {
+  $result = db_query("SELECT r.rid, p.perm FROM {role} r INNER JOIN {permission} p ON p.rid = r.rid");
+  $perms = array();
+  while ($row = db_fetch_object($result)) {
+    $perms[$row->rid] = explode(', ', $row->perm);
+  }
+  return $perms;
+}
+
+
+/**
+ * Implementation of hook_disable()
+ */
+function view_own_disable() {
+  view_own_disabling(TRUE);
+  node_access_needs_rebuild();
+  drupal_set_message(t('NOTE: Now you should rebuild permission. Remember that this process can take some time and so be patient !rebuild.', array('!rebuild' => l(t('rebuild permissions'), 'admin/content/node-settings'))));
+}
+
+/**
+ * Simple function to identify when module is being disabled
+ * so that as the node_access table is rebuilt, it doesn't set
+ * any permissions for this module
+ */
+function view_own_disabling($set = NULL) {
+  static $disabling = FALSE;
+  if ($set != NULL) {
+    $disabling = $set;
+  }
+  return $disabling;
+}
+
+/**
+ * Implementation of hook_enable()
+  */
+function view_own_enable() {
+  node_access_needs_rebuild();
+  drupal_set_message(t('NOTE: Now you should rebuild permission. Remember that this process can take some time and so be patient !rebuild.', array('!rebuild' => l(t('rebuild permissions'), 'admin/content/node-settings'))));
+}

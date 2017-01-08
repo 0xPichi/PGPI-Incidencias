@@ -32,7 +32,6 @@
     <footer>
     <?php print render($content['field_tags']); ?>
     <?php print render($content['links']); ?> 
-    <a href="<?php print $node_url; ?>">Solicitar Cierre</a>
     </footer>
     <?php endif; ?> 
 
