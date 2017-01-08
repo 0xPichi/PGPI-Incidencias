@@ -4,6 +4,7 @@
     <p class="submitted">
       <?php print $picture; ?>
       <?php print $submitted; ?>
+      <?php print $permalink; ?>
     </p>
 
     <?php print render($title_prefix); ?>
